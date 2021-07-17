@@ -1,20 +1,35 @@
-import React from 'react';
+import React, {useState} from 'react';
 import MovieTitle from "./MovieTitle.Component";
 import Alert from "../UI/Alert.UI";
+import Pagination from "../common/pagination.component";
+import {getMovies} from "../../Starter Code/services/fakeMovieService";
+
 
 const Movie = (props) => {
-    const onDelete = (movie) =>{
-     props.onDeleteHandler(movie)
-    }
+//region states and variables 
+    const[movies,setMovies] = useState(getMovies())
+    let pageSize =4;
+ //endregion
+   //region Methods 
+    const onDeleteHandler = (movie) =>setMovies(movies.filter(m => m._id !== movie._id)) // deletes movies from database 
+    const onLikeHandler = (movie) => { // likes unlikes a movie
+        let updatedMovies = movies.map(m => {
+            if (m._id === movie._id) {
+                return {...m, liked: !m.liked} // this makes the opposite of the movie unliked
+            }
+            return m;
+        })
 
-    const onLike = (movie) =>{
-       props.onLikeHandler(movie)
+        setMovies(updatedMovies)
+
     }
+    //endregion
+ 
 
     return (
-        <div>
+        <React.Fragment>
 
-            <Alert movieCount={props.movies.length}/>
+            <Alert movieCount={movies.length}/>
             <table className="table table-hover">
                 <thead>
                 <tr>
@@ -28,17 +43,18 @@ const Movie = (props) => {
                 </thead>
                 <tbody>
 
-                {props.movies.map(movie =>
+                {movies.map(movie =>
                     <MovieTitle key={movie._id}
                                 movie={movie}
-                                onDelete = {onDelete}
-                                onLike={onLike}
+                                onDelete = {onDeleteHandler}
+                                onLike={onLikeHandler}
 
                     />
                 )}
                 </tbody>
             </table>
-        </div>
+            <Pagination itemsCount={movies.length} pageSize={pageSize}  />
+        </React.Fragment>
     );
 };
 
