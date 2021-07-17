@@ -5,13 +5,13 @@ import Pagination from "../common/pagination.component";
 import {getMovies} from "../../Starter Code/services/fakeMovieService";
 
 
-const Movie = (props) => {
-//region states and variables 
-    const[movies,setMovies] = useState(getMovies())
-    let pageSize =4;
- //endregion
-   //region Methods 
-    const onDeleteHandler = (movie) =>setMovies(movies.filter(m => m._id !== movie._id)) // deletes movies from database 
+function Movie() {
+//region states and variables and props
+    const [movies, setMovies] = useState(getMovies())
+    let pageSize = 4;
+    //endregion
+    //region Methods
+    const onDeleteHandler = (movie) => setMovies(movies.filter(m => m._id !== movie._id)) // deletes movies from database
     const onLikeHandler = (movie) => { // likes unlikes a movie
         let updatedMovies = movies.map(m => {
             if (m._id === movie._id) {
@@ -23,8 +23,11 @@ const Movie = (props) => {
         setMovies(updatedMovies)
 
     }
+    const handlePageChange = page => {
+  console.log(page)
+    }
     //endregion
- 
+
 
     return (
         <React.Fragment>
@@ -46,16 +49,16 @@ const Movie = (props) => {
                 {movies.map(movie =>
                     <MovieTitle key={movie._id}
                                 movie={movie}
-                                onDelete = {onDeleteHandler}
+                                onDelete={onDeleteHandler}
                                 onLike={onLikeHandler}
 
                     />
                 )}
                 </tbody>
             </table>
-            <Pagination itemsCount={movies.length} pageSize={pageSize}  />
+            <Pagination itemsCount={movies.length} pageSize={pageSize} onpageChange={handlePageChange}/>
         </React.Fragment>
     );
-};
+}
 
 export default Movie
