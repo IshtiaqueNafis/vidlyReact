@@ -1,16 +1,19 @@
 import './App.css';
 import Movie from "./components/Movie/Movie.Component";
-const App = () => {
+import {Component} from "react";
+
+class App extends Component {
+    render() {
 
 
+        return (
 
-    return (
+            <main className="container">
+                <Movie/>
 
-        <main className="container">
-           <Movie />
-
-        </main>
-    );
-};
+            </main>
+        );
+    }
+}
 
 export default App;
