@@ -7,17 +7,22 @@ const App = () => {
 
     const[movies,setMovies] = useState(getMovies())
 
-    const onDeleteHandler =(movie) =>{
+    const onDeleteHandler =(movie) => setMovies(movies.filter(m => m._id !== movie._id))
+    const onLikeHandler = (movie) =>{
+    let updatedMovies = movies.map(m => {
+        if(m._id===movie._id) {
+            return {...m,liked:!m.liked} // this makes the opposite of the movie unliked
+        }
+        return m;
+     })
 
-        setMovies(movies.filter(m=>m._id!==movie._id))
-
+        setMovies(updatedMovies)
     }
 
     return (
 
         <main className="container">
-            {console.log(movies)}
-           <Movie movies={movies}  onDeleteHandler={onDeleteHandler}/>
+           <Movie movies={movies}  onDeleteHandler={onDeleteHandler} onLikeHandler={onLikeHandler} />
 
         </main>
     );

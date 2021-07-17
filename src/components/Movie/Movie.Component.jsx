@@ -7,6 +7,10 @@ const Movie = (props) => {
      props.onDeleteHandler(movie)
     }
 
+    const onLike = (movie) =>{
+       props.onLikeHandler(movie)
+    }
+
     return (
         <div>
 
@@ -19,6 +23,7 @@ const Movie = (props) => {
                     <th scope="col">Stock</th>
                     <th scope="col">Rate</th>
                     <th scope="col"/>
+                    <th scope="col"/>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,6 +32,7 @@ const Movie = (props) => {
                     <MovieTitle key={movie._id}
                                 movie={movie}
                                 onDelete = {onDelete}
+                                onLike={onLike}
 
                     />
                 )}
