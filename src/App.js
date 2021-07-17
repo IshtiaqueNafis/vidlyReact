@@ -1,25 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
+import {getMovies} from "./Starter Code/services/fakeMovieService";
+import Movie from "./components/Movie/Movie.Component";
+import {useState} from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+
+    const[movies,setMovies] = useState(getMovies())
+
+    const onDeleteHandler =(movie) =>{
+
+        setMovies(movies.filter(m=>m._id!==movie._id))
+
+    }
+
+    return (
+
+        <main className="container">
+            {console.log(movies)}
+           <Movie movies={movies}  onDeleteHandler={onDeleteHandler}/>
+
+        </main>
+    );
+};
 
 export default App;
