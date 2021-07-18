@@ -1,9 +1,9 @@
 import Like from "../common/Like.Component";
 import Button from "../UI/Button.UI.Jsx";
-import * as PropTypes from "prop-types";
 import TableHeader from "../common/tableHeader";
 import TableBody from "../common/tableBody";
 import React, {Component} from 'react';
+import Table from "../common/table";
 
 class MovieTable extends Component {
     columns = [
@@ -16,15 +16,9 @@ class MovieTable extends Component {
     ]
 
     render() {
-        const {movies, onLike, onDelete, onSort, sortColumn} = this.props;
+        const {movies, onSort, sortColumn} = this.props;
         return (
-            <table className="table table-hover">
-
-                <TableHeader columns={this.columns} sortColumn={sortColumn} onSort={onSort}/>
-                <TableBody columns={this.columns} data={movies}/>
-
-
-            </table>
+            <Table columns={this.columns} data={movies} sortColumn={sortColumn} onSort={onSort}/>
         );
     }
 }
