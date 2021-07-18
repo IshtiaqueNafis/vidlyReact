@@ -16,10 +16,12 @@ class TableHeader extends Component {
     render() {
         return (
 
+                    <thead>
                 <tr className="table-dark">
                     {this.props.columns.map(column => <th key={column.path || column.key } onClick={()=>this.raiseSort(column.path)}> {column.label}</th>)}
                     {/*in here the key can be input or output both */}
                 </tr>
+                    </thead>
 
         );
     }

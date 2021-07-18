@@ -4,8 +4,6 @@ const Button = (props) => {
 
     return (
 
-
-
             <button className={props.buttonType} onClick={props.onClick}>
                 {props.children}
             </button>

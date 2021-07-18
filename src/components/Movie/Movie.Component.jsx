@@ -1,5 +1,4 @@
 import React from 'react';
-import MovieTitle from "./MovieTitle.Component";
 import Alert from "../UI/Alert.UI";
 import Pagination from "../common/pagination.component";
 import {getMovies} from "../../Starter Code/services/fakeMovieService";
@@ -7,6 +6,7 @@ import {getGenres} from "../../Starter Code/services/fakeGenreService";
 import {paginate} from "../../utils/paginatia";
 import ListGroup from "../common/ListGroup";
 import _ from 'lodash';
+import MovieTable from "./MovieTable.Component";
 
 class Movie extends React.Component {
     constructor(props) {
@@ -72,7 +72,7 @@ class Movie extends React.Component {
                 </div>
                 <div className="col">
                     <Alert movieCount={filtered.length}/>
-                    <MovieTitle
+                    <MovieTable
                         movies={movies}
                         sortColumn={sortColumn}
                         onDelete={this.onDeleteHandler}
