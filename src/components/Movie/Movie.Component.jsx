@@ -3,7 +3,7 @@ import MovieTitle from "./MovieTitle.Component";
 import Alert from "../UI/Alert.UI";
 import Pagination from "../common/pagination.component";
 import {getMovies} from "../../Starter Code/services/fakeMovieService";
-import {genres, getGenres} from "../../Starter Code/services/fakeGenreService";
+import {getGenres} from "../../Starter Code/services/fakeGenreService";
 import {paginate} from "../../utils/paginatia";
 import ListGroup from "../common/ListGroup";
 
@@ -14,15 +14,18 @@ class Movie extends React.Component {
             movies: [],
             genres: [], // its empty now
             pageSize: 4,
-            currentPage: 1
+            currentPage: 1,
+
         }
 
     }
+
     componentWillMount() {
- this.setState({movies: getMovies(),genres:getGenres()});
+        this.setState({movies: getMovies(), genres: getGenres()});
     }
+
     onDeleteHandler = (movie) => {
-     const movies= this.state.movies.filter(m => m._id !== movie._id) // deletes movies from database
+        const movies = this.state.movies.filter(m => m._id !== movie._id) // deletes movies from database
         this.setState({movies: movies})
     }
     onLikeHandler = (movie) => { // likes unlikes a movie
@@ -30,26 +33,34 @@ class Movie extends React.Component {
         const index = movies.indexOf(movie);
         movies[index] = {...movies[index]};
         movies[index].liked = !movies[index].liked;
+
         this.setState({movies});
     }
-    handlePageChange = page=>{
+    handlePageChange = page => {
         this.setState({currentPage: page})
     }
-    handleGenreSelect = genre =>{
-        console.log(genre);
+    handleGenreSelect = genre => {
+        this.setState({selectedGenre: genre}) // adding dynamic classs property
     }
 
 
     //endregion
 
     render() {
-     const {length:count} = this.state.movies;
-     const {pageSize,currentPage,movies:allMovies} = this.state;
-     const movies = paginate(allMovies,currentPage,pageSize)
+        const {length: count} = this.state.movies;
+        const {pageSize, currentPage, movies: allMovies} = this.state;
+        const movies = paginate(allMovies, currentPage, pageSize)
         return (
-            <div className='row' >
-                <div className="col-2">
-                    <ListGroup items={this.state.genres} onItemSelect={this.handleGenreSelect}/>
+            <div className='row'>
+                <div className="col-3">
+                    <ListGroup
+                        items={this.state.genres}
+                        selectedItem={this.state.selectedGenre}
+                        onItemSelect={this.handleGenreSelect}
+
+
+
+                    />
                 </div>
                 <div className="col">
                     <Alert movieCount={count}/>
@@ -72,6 +83,7 @@ class Movie extends React.Component {
                                         onDelete={this.onDeleteHandler}
                                         onLike={this.onLikeHandler}
 
+
                             />
                         )}
                         </tbody>
@@ -91,4 +103,5 @@ class Movie extends React.Component {
 
     }
 }
+
 export default Movie;
