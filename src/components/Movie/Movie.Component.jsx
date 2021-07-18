@@ -48,8 +48,9 @@ class Movie extends React.Component {
 
     render() {
         const {length: count} = this.state.movies;
-        const {pageSize, currentPage, movies: allMovies} = this.state;
-        const movies = paginate(allMovies, currentPage, pageSize)
+        const {pageSize, currentPage, movies: allMovies,selectedGenre} = this.state;
+        const filtered = selectedGenre? allMovies.filter(m=>m.genre._id===selectedGenre._id):allMovies; // this filters the movies
+        const movies = paginate(filtered, currentPage, pageSize)
         return (
             <div className='row'>
                 <div className="col-3">
@@ -63,7 +64,7 @@ class Movie extends React.Component {
                     />
                 </div>
                 <div className="col">
-                    <Alert movieCount={count}/>
+                    <Alert movieCount={filtered.length}/>
                     <table className="table table-hover">
                         <thead>
                         <tr>
@@ -89,7 +90,7 @@ class Movie extends React.Component {
                         </tbody>
                     </table>
                     <Pagination
-                        itemsCount={count}
+                        itemsCount={filtered.length}
                         pageSize={pageSize}
                         onPageChange={this.handlePageChange}
                         currentPage={currentPage}
