@@ -6,6 +6,7 @@ import {getMovies} from "../../Starter Code/services/fakeMovieService";
 import {getGenres} from "../../Starter Code/services/fakeGenreService";
 import {paginate} from "../../utils/paginatia";
 import ListGroup from "../common/ListGroup";
+import _ from 'lodash';
 
 class Movie extends React.Component {
     constructor(props) {
@@ -15,13 +16,14 @@ class Movie extends React.Component {
             genres: [], // its empty now
             pageSize: 4,
             currentPage: 1,
+            sortColumn: {path: 'title', order: 'asc'}
 
         }
 
     }
 
     componentWillMount() {
-        const genres = [{name:'All Genre'},...getGenres()]
+        const genres = [{name: 'All Genre', _id: ''}, ...getGenres()]
         this.setState({movies: getMovies(), genres: genres});
     }
 
@@ -41,18 +43,22 @@ class Movie extends React.Component {
         this.setState({currentPage: page})
     }
     handleGenreSelect = genre => {
-        this.setState({selectedGenre: genre,currentPage: 1}) // adding dynamic classs property
+        this.setState({selectedGenre: genre, currentPage: 1}) // adding dynamic classs property
     }
+    handleSort = (sortColumn) => {
 
+        this.setState({sortColumn})
+    }
 
     //endregion
 
     render() {
         const {length: count} = this.state.movies;
-        const {pageSize, currentPage, movies: allMovies,selectedGenre} = this.state;
-        const filtered = selectedGenre && selectedGenre._id? allMovies.filter(m=>m.genre._id===selectedGenre._id):allMovies; // this filters the movies
+        const {pageSize, currentPage, movies: allMovies, selectedGenre,sortColumn} = this.state;
+        const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies; // this filters the movies
         //selectedGenre && selectedGenre._id?  this make sure both values are the same
-        const movies = paginate(filtered, currentPage, pageSize)
+     const sorted=   _.orderBy(filtered,[sortColumn.path],[sortColumn.order])
+        const movies = paginate(sorted, currentPage, pageSize)
         return (
             <div className='row'>
                 <div className="col-3">
@@ -62,17 +68,17 @@ class Movie extends React.Component {
                         onItemSelect={this.handleGenreSelect}
 
 
-
                     />
                 </div>
                 <div className="col">
                     <Alert movieCount={filtered.length}/>
-
-                        <MovieTitle
-                                    movies={movies}
-                                    onDelete={this.onDeleteHandler}
-                                    onLike={this.onLikeHandler}
-                        />
+                    <MovieTitle
+                        movies={movies}
+                        sortColumn={sortColumn}
+                        onDelete={this.onDeleteHandler}
+                        onLike={this.onLikeHandler}
+                        onSort={this.handleSort}
+                    />
 
                     <Pagination
                         itemsCount={filtered.length}
