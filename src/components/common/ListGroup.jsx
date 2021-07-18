@@ -1,13 +1,9 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-class ListGroup  extends Component {
-    render() {
-        return (
-            <div>
-                
-            </div>
-        );
-    }
-}
+const ListGroup = () => (
+    <div>
+
+    </div>
+);
 
 export default ListGroup ;
