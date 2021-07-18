@@ -1,7 +1,6 @@
 import React from 'react';
 
-const ListGroup = (props) => {
-    const {items, textProperty, valueProperty, onItemSelect, selectedItem} = props;
+const ListGroup = ({items, onItemSelect, selectedItem, textProperty, valueProperty}) => {
     return (
 
         <ul className="list-group bg-dark mt-3 clickable">

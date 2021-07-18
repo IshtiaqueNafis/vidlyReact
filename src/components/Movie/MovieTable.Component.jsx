@@ -1,7 +1,5 @@
 import Like from "../common/Like.Component";
 import Button from "../UI/Button.UI.Jsx";
-import TableHeader from "../common/tableHeader";
-import TableBody from "../common/tableBody";
 import React, {Component} from 'react';
 import Table from "../common/table";
 
