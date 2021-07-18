@@ -1,14 +1,12 @@
 import React from 'react';
 
 const Button = (props) => {
-    const onDelete =() =>{
-       props.onDelete();
-    }
+
     return (
 
 
         <td>
-            <button className={props.buttonType} onClick={onDelete}>
+            <button className={props.buttonType} onClick={props.onClick}>
                 {props.children}
             </button>
         </td>

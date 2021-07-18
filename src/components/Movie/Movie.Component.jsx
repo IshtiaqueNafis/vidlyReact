@@ -21,7 +21,8 @@ class Movie extends React.Component {
     }
 
     componentWillMount() {
-        this.setState({movies: getMovies(), genres: getGenres()});
+        const genres = [{name:'All Genre'},...getGenres()]
+        this.setState({movies: getMovies(), genres: genres});
     }
 
     onDeleteHandler = (movie) => {
@@ -40,7 +41,7 @@ class Movie extends React.Component {
         this.setState({currentPage: page})
     }
     handleGenreSelect = genre => {
-        this.setState({selectedGenre: genre}) // adding dynamic classs property
+        this.setState({selectedGenre: genre,currentPage: 1}) // adding dynamic classs property
     }
 
 
@@ -49,7 +50,8 @@ class Movie extends React.Component {
     render() {
         const {length: count} = this.state.movies;
         const {pageSize, currentPage, movies: allMovies,selectedGenre} = this.state;
-        const filtered = selectedGenre? allMovies.filter(m=>m.genre._id===selectedGenre._id):allMovies; // this filters the movies
+        const filtered = selectedGenre && selectedGenre._id? allMovies.filter(m=>m.genre._id===selectedGenre._id):allMovies; // this filters the movies
+        //selectedGenre && selectedGenre._id?  this make sure both values are the same
         const movies = paginate(filtered, currentPage, pageSize)
         return (
             <div className='row'>
@@ -65,30 +67,13 @@ class Movie extends React.Component {
                 </div>
                 <div className="col">
                     <Alert movieCount={filtered.length}/>
-                    <table className="table table-hover">
-                        <thead>
-                        <tr>
-                            <th scope="col">Title</th>
-                            <th scope="col">Genre</th>
-                            <th scope="col">Stock</th>
-                            <th scope="col">Rate</th>
-                            <th scope="col"/>
-                            <th scope="col"/>
-                        </tr>
-                        </thead>
-                        <tbody>
 
-                        {movies.map(movie =>
-                            <MovieTitle key={movie._id}
-                                        movie={movie}
-                                        onDelete={this.onDeleteHandler}
-                                        onLike={this.onLikeHandler}
+                        <MovieTitle
+                                    movies={movies}
+                                    onDelete={this.onDeleteHandler}
+                                    onLike={this.onLikeHandler}
+                        />
 
-
-                            />
-                        )}
-                        </tbody>
-                    </table>
                     <Pagination
                         itemsCount={filtered.length}
                         pageSize={pageSize}
