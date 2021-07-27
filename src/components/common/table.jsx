@@ -1,17 +1,23 @@
 import React from 'react';
-import TableHeader from "./tableHeader";
+import TableHeader from "./tableheader";
 import TableBody from "./tableBody";
 
-const Table = ({columns, data, onSort, sortColumn}) => {
+const Table = (props) => {
+    const {columns,  data, sortColumn, onSort} = props;
     return (
+        <div>
+            <table className="table">
 
-        <table className="table table-hover">
+                <TableHeader
+                    columns={columns} // --> columns table array
+                    sortColumn={sortColumn} // --> sortColumn object
+                    onSort={onSort} // --> this will sort the array
+                />
 
-            <TableHeader columns={columns} sortColumn={sortColumn} onSort={onSort}/>
-            <TableBody columns={columns} data={data}/>
+                <TableBody data={data} columns={columns}/>
 
-
-        </table>
+            </table>
+        </div>
     );
 };
 

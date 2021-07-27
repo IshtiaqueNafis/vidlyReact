@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import 'bootswatch/dist/materia/bootstrap.min.css';
+import 'bootswatch/dist/solar/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.css'
 ReactDOM.render(
   <React.StrictMode>
