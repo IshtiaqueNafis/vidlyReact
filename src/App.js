@@ -1,12 +1,13 @@
-import './App.css';
-import Movies from "./components/movies/movies";
-import NavBar from "./components/UI/NavBar";
 import React from "react";
 import {Route, Switch,Redirect} from "react-router-dom";
+import Movies from "./components/movies/movies";
 import Customers from "./components/customers/customers";
+import NavBar from "./components/UI/NavBar";
 import Rental from "./components/rentals/rental";
 import NotFound from "./components/common/not-found";
 import MovieDetails from "./components/movies/movieDetails";
+import LoginForm from "./components/login/loginForm";
+import './App.css';
 const App = () => {
 
 
@@ -16,6 +17,7 @@ const App = () => {
        <NavBar/>
         <main className="container">
             <Switch> {/*Switch is used to match the parameter of an object  works like a if else statment */}
+                <Route path='/login' component={LoginForm}/> {/*this is for logging in */}
                 <Route path='/movieDetails/:_id' component={MovieDetails}/> {/*This path='/movieDetails/:_id' component={MovieDetails} --> this is the matching parameter component means it will go to Movies */}
                 <Route path='/movies' component={Movies}/> {/* this will go to movies */}
                 <Route path='/customers' component={Customers}/>{/* this will go to customers */}
