@@ -18,17 +18,20 @@ class LoginForm extends Component {
     //region methods
 
     //region  validate method
+    // validates input
     validate = () => {
-        const errors = {};
-        const {account} = this.state;
+        const errors = {}; // empty error object
+        //region object destrucring
+        const {account} = this.state; // -->getting the account property
+        //endregion
         if (account.username.trim() === '') {
-            errors.username = "UserName is Required";
+            errors.username = "UserName is Required"; //--> creating dynamic property of name
         }
         if (account.password.trim() === '') {
-            errors.password = "password is required";
+            errors.password = "password is required"; //--> creating dynamic property of password
         }
 
-        return Object.keys(errors).length === 0 ? null : errors; // if the key have 0 object means there was no errors else there was errors.
+        return Object.keys(errors).length === 0 ? null : errors; //--> if the key have 0 object means there was no errors else there was errors.
     }
 
 
@@ -36,22 +39,41 @@ class LoginForm extends Component {
 
 
     //region  sumbitform
+    // submits the form
     handleSubmit = e => {
-        e.preventDefault(); // this helps with default method which loads the page.
-        const errors = this.validate(); // this will check for validation
-        this.setState({errors:errors || {}}) // --> error property is being set here also -> this prevents null error this error has a key and value here with {} empty
-        if (errors) return; // if there is any error this helps with to make sure the program is running fine.
 
+        e.preventDefault(); // this helps with default method which loads the page.-> also e stands for prevent default
+        const errors = this.validate(); // this will check for validation
+        this.setState({errors: errors || {}}) // --> error property is being set here also -> this prevents null error this error has a key and value here with {} empty
+        if (errors) return; // if there is any error this helps with to make sure the program is running fine. this quits the program tight away.
         console.log('submitted')
 
 
     }
     //endregion
-    //region handlechange
+    //region
+    validateProperty = ({name,value}) => {
+        //{name,value} --> object destrucutre of currentTarget aka name or value.
+    if(name==='username'){
+        if(value.trim()==='') return 'UserName is Required';
+    } if(name==='password'){
+            if(value.trim()==='') return 'password is required';
+        }
+    }
+    //endregion
+
+    //region handleChange
+
     handleChange = ({currentTarget: input}) => {
         // this.currentTarget has been renamed to input here
+        const errors = {...this.state.errors}; //--> clones all the error messages.
+        const errorMessage = this.validateProperty(input); // -> this recives input from the user.
+
+        if (errorMessage) errors[input.name] = errorMessage; //--> this sets the value dynamcially if errormessage is truthy
+        else delete errors[input.name]; //-> this is a built in method deletes property
+
         const account = {...this.state.account}; // cloning the object
-        account[input.name] = input.value;
+        account[input.name] = input.value; //-> input.name set it to input.value.
         //region comment and explantion
         /*
          account[input.name] -->  name="username"  this is from username notice that key an property name in state both arte same
@@ -59,13 +81,13 @@ class LoginForm extends Component {
          this makes the program dynamic and easy to run.
          */
         //endregion
-        this.setState({account: account}); // -->updating the state.
+        this.setState({account, errors}); // -->updating the state.
     }
     //endregion
     //endregion
     render() {
         //region object destrucure
-        const {account,errors} = this.state
+        const {account, errors} = this.state
         //endregion
         return (
             <div>
