@@ -1,12 +1,13 @@
 import React from 'react';
 
-const Input = ({label, name, onChange, value}) => {
+const Input = ({label, name, onChange, value, error}) => {
     //region  parameter explanation
     /*
     label--> this for the label like whats the output is going to be
     name --> will be used for id and name and html for
     onChange --> is a function that sets value for state or input
     value -> is for updaring the state as input being typed
+    error -> error is for any error related to the program.
      */
     //endregion
     return (
@@ -21,6 +22,11 @@ const Input = ({label, name, onChange, value}) => {
                 name={name} // this will be used to acess the value dynamically.
                 type="text"
                 className="form-control"/>
+
+            {error && <div className="alert alert-danger">{error}</div>}
+            {/*this checks whehter or not there is error by using error && program will execute if there any error.  */}
+
+
         </div>
     );
 }
