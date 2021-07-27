@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {getMovies} from "../Starter Code/services/fakeMovieService";
-import {getGenres} from "../Starter Code/services/fakeGenreService";
-import Pagination from "./common/pagination";
-import {paginate} from "../utils/paginate";
-import ListGroup from "./common/listgroup";
+import {getMovies} from "../../Starter Code/services/fakeMovieService";
+import {getGenres} from "../../Starter Code/services/fakeGenreService";
+import Pagination from "../common/pagination";
+import {paginate} from "../../utils/paginate";
+import ListGroup from "../common/listgroup";
 import MoviesTable from "./moviesTable";
 import _ from "lodash"
-import Alert from "./UI/Alert.UI";
+import Alert from "../UI/Alert.UI";
 
 class Movies extends Component {
 

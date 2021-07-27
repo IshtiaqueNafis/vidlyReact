@@ -1,10 +1,20 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
+import {Link} from "react-router-dom";
 
 class TableBody extends Component {
     //region methods
     renderCell = (item, column) => {
-        return column.content ? column.content(item) : _.get(item, column.path);
+        if (column.content) {
+            return column.content(item)
+        } else {
+
+
+
+            return _.get(item, column.path);
+        }
+
+
         //region code explanation
         /*
         column.content ? column.content(item) : _.get(item, column.path);
@@ -23,9 +33,8 @@ class TableBody extends Component {
      */
 
 
-
     //endregion
- //endregion
+    //endregion
 
     render() {
         const {data, columns} = this.props;
