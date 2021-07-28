@@ -34,7 +34,7 @@ const ListGroup = ({items, textProperty, valueProperty, onItemSelect, selectedIt
     );
     //endregion
 };
-    // region default props
+    // region default props --> decides the property for the
 ListGroup.defaultProps = {
     textProperty: 'name', // deefault props is being set here this gives it dynamic optins
     valueProperty: '_id'
