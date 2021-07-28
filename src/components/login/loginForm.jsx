@@ -1,18 +1,27 @@
 import React, {Component} from 'react';
 import Input from "../common/input";
-
+import Joi from 'joi-browser' // this the libray for validation of input.
 class LoginForm extends Component {
 
 //region single  Source of truth aka state
     constructor(props, context) {
         super(props, context);
         this.state = {
-            account: {username: '', password: ''},
+            account: {username: '', password: ''}, // will be used as a validation to use on account
             errors: {} // this will take care of errors.
         }
     }
 
 //endregion
+
+    //region schema
+    // this will be used for input of joi valodation
+    schema = {
+        username: Joi.string().required(),// user name and password both expected to be an input of string and both has to be mandotry
+        password: Joi.string().required()
+
+    }
+    //endregion
 
 
     //region methods
@@ -20,18 +29,15 @@ class LoginForm extends Component {
     //region  validate method
     // validates input
     validate = () => {
-        const errors = {}; // empty error object
-        //region object destrucring
-        const {account} = this.state; // -->getting the account property
+        const result = Joi.validate(this.state.account, this.schema, {abortEarly: false});
+        // region code explanation `
+        /*
+        this.state.account --> this.state.account this is the object of the form with userInput has property of username and password
+        this.schema--> is the this.schema --> is the joy object also has same property as this.state.account but they are based on criteria property
+        abortEarly: false} --> this means lets say more than one error is found it will show more than one error message.
+         */
         //endregion
-        if (account.username.trim() === '') {
-            errors.username = "UserName is Required"; //--> creating dynamic property of name
-        }
-        if (account.password.trim() === '') {
-            errors.password = "password is required"; //--> creating dynamic property of password
-        }
-
-        return Object.keys(errors).length === 0 ? null : errors; //--> if the key have 0 object means there was no errors else there was errors.
+        console.log(result);
     }
 
 
@@ -52,12 +58,13 @@ class LoginForm extends Component {
     }
     //endregion
     //region
-    validateProperty = ({name,value}) => {
+    validateProperty = ({name, value}) => {
         //{name,value} --> object destrucutre of currentTarget aka name or value.
-    if(name==='username'){
-        if(value.trim()==='') return 'UserName is Required';
-    } if(name==='password'){
-            if(value.trim()==='') return 'password is required';
+        if (name === 'username') {
+            if (value.trim() === '') return 'UserName is Required';
+        }
+        if (name === 'password') {
+            if (value.trim() === '') return 'password is required';
         }
     }
     //endregion
