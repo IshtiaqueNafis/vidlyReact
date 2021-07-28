@@ -16,6 +16,7 @@ class LoginForm extends Component {
 
     //region schema
     // this will be used for input of joi valodation
+    // mot part of state cause it does not change.
     schema = {
         username: Joi.string().required().label("Username"),// user name and password both expected to be an input of string and both has to be mandotry
         password: Joi.string().required().label("Password"), // label is used to create friendly messages
@@ -31,12 +32,14 @@ class LoginForm extends Component {
     validate = () => {
         //region object destrucure
         const options = {abortEarly: false}
-        const {error} = Joi.validate(this.state.account, this.schema,options);
+        const {error} = Joi.validate(this.state.account, this.schema, options);
         //endregion
         // region code explanation `
         /*
         this.state.account --> this.state.account this is the object of the form with userInput has property of username and password
-        this.schema--> is the this.schema --> is the joy object also has same property as this.state.account but they are based on criteria property
+                           --> this is the object checked for validation
+        this.schema--> is the this.schema
+                   --> is the joy object also has same property as this.state.account but they are based on criteria property
         abortEarly: false} --> this means lets say more than one error is found it will show more than one error message.
          */
         //endregion
@@ -83,18 +86,26 @@ class LoginForm extends Component {
 
     }
     //endregion
-    //region
+    //region validate property
     validateProperty = ({name, value}) => {
-        //{name,value} --> object destrucutre of currentTarget aka name or value.
-        if (name === 'username') {
-            if (value.trim() === '') return 'UserName is Required';
-        }
-        if (name === 'password') {
-            if (value.trim() === '') return 'password is required';
-        }
+        const obj = {[name]: value}; //-> by using the object property as input has name and value from keyboard inout will be in this name or password and value is fixed so no need to use computed property
+        const schema = {[name]: this.schema[name]}
+        //region explanation
+        //  const schema = {[name]: this.schema[name]}
+        /*
+          -->  const schema --> schema have to be reitnalized here again cause it would not work cause it is checking after submission not before
+               --> {[name]: this.schema[name]}
+                   --> [name] is computed property here
+                       --> thus this can be either name or any property I would want.
+                       -> so for example if name="username" key will be username
+                   -->  this.schema[name] --> same concept as before will use computed property to acess the schema.
+         */
+        //endregion
+        const {error} = Joi.validate(obj, schema) // then compare one value at a time depends on input.
+        return error ? error.details[0].message : null; // -> if error is not null return error.message else return null. means no error what so ever.
+
     }
     //endregion
-
     //region handleChange
 
     handleChange = ({currentTarget: input}) => {
@@ -146,7 +157,15 @@ class LoginForm extends Component {
                         error={errors.password} // error password is being passed this will check whther or not there is any errors.
                     />
 
-                    <button className=" btn btn-primary">Login</button>
+                    <button
+                        disabled={this.validate()
+                        } /* --> this disabled()
+                        is passed here instead of this.validate() cause
+                         the function must execute so reference will not work here.
+                         trutht--> means null was returned falsy means--> there is issue with input
+                        */
+                        className="btn btn-primary mt-2">Login
+                    </button>
                 </form>
             </div>
         );

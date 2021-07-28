@@ -11,7 +11,7 @@ const Input = ({label, name, onChange, value, error}) => {
      */
     //endregion
     return (
-        <div className="form-group row">
+        <div className="form-group">
             <label htmlFor={name}>{label}</label>
             {/*htmlFor replaces For in  for in html in general */}
             <input
