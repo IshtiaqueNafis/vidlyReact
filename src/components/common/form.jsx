@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, {Component} from 'react';
 import Joi from "joi-browser";
+import Input from "./input";
 
 class Form extends Component {
 
@@ -13,14 +14,15 @@ class Form extends Component {
         }
     }
 
+
     //endregion
-    //region methods --> [Validate(),validateProperty(),submitForm(),handleChange()]
+    //region methods --> [Validate(),validateProperty(),submitForm(),handleChange(),renderBUtton(), renderInput()]
     //region  validate method -->validates input when typing
 
     validate = () => {
         //region object destrucure
         const options = {abortEarly: false}
-        const {error} = Joi.validate(this.state.data, this.schema, options);
+        const {error} = Joi.validate(this.state.data, this.schema, options); //-> return an error object.
         //endregion
         // region code explanation `
         /*
@@ -28,6 +30,7 @@ class Form extends Component {
                            --> this is the object checked for validation
         this.schema--> is the this.schema
                    --> is the joy object also has same property as this.state.data but they are based on criteria property
+                   --> schema will be passed on from
         abortEarly: false} --> this means lets say more than one error is found it will show more than one error message.
          */
         //endregion
@@ -112,6 +115,28 @@ class Form extends Component {
         //endregion
         this.setState({data, errors}); // -->updating the state.
     }
+    //endregion
+    //region  renderButton --> renders button for forms
+    renderButton = label => <button disabled={this.validate()} className="btn btn-primary mt-2">{label}</button>;
+
+
+    //endregion
+    //region  renderInput --> rendersinput for input from the user
+    renderInput = (name,label,type="text") => {
+        //type is a string with text value.
+        const {data, errors} = this.state;   // based on program running errors will be set.
+        return (
+            <Input
+                type={type} // type of the input field
+                name={name} // this is the username propertybeing passed notice that both username in here and state must match
+                value={data[name]} // this the value of the data object name
+                label={label}// label can be anything I want it to be
+                onChange={this.handleChange} // isreferencing onChange method.
+                error={errors[name]} // error object is being passed this wll check whether or not there is any errors.
+
+            />
+        );
+    };
     //endregion
     //endregion
 
