@@ -17,8 +17,8 @@ class LoginForm extends Component {
     //region schema
     // this will be used for input of joi valodation
     schema = {
-        username: Joi.string().required(),// user name and password both expected to be an input of string and both has to be mandotry
-        password: Joi.string().required()
+        username: Joi.string().required().label("Username"),// user name and password both expected to be an input of string and both has to be mandotry
+        password: Joi.string().required().label("Password"), // label is used to create friendly messages
 
     }
     //endregion
@@ -29,7 +29,10 @@ class LoginForm extends Component {
     //region  validate method
     // validates input
     validate = () => {
-        const result = Joi.validate(this.state.account, this.schema, {abortEarly: false});
+        //region object destrucure
+        const options = {abortEarly: false}
+        const {error} = Joi.validate(this.state.account, this.schema,options);
+        //endregion
         // region code explanation `
         /*
         this.state.account --> this.state.account this is the object of the form with userInput has property of username and password
@@ -37,7 +40,30 @@ class LoginForm extends Component {
         abortEarly: false} --> this means lets say more than one error is found it will show more than one error message.
          */
         //endregion
-        console.log(result);
+        if (!error) return null; //-> if error is falst means no value there what so ever error result.error does not have any messages of error
+        const errors = {};
+        for (let item of error.details) {
+            errors[item.path[0]] = item.message;
+
+            //region Code explanation
+            /*
+            result.error.details --> this goes into result.error.details --> result is the object got from --> Joi.validate(this.state.account, this.schema, {abortEarly: false});
+                                 --> result has access to result.error.details property
+
+            for (let item of result.error.details) {
+            errors[item.path[0]] = item.message;
+            --> means item will loopthrough the objects with item.path[0] -> is where all the error messages is located.
+
+            details: Array(2) -->
+            0: {message: ""username" is not allowed to be empty", path: Array(1), type: "any.empty", context: {…}}
+            1: {message: ""password" is not allowed to be empty", path: Array(1), type: "any.empty", context: {…}}
+
+             */
+
+            //endregion
+        }
+
+        return errors;
     }
 
 
