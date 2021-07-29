@@ -27,6 +27,16 @@ const NavBar = () => {
                             {/*Go to rentals */}
                         </li>
 
+                        <li className="nav-item">
+                            <Link to="/register" className="nav-link">Register</Link>
+                            {/*Go to rentals */}
+                        </li>
+
+                        <li className="nav-item">
+                            <Link to="/newmovie" className="nav-link">New Movie</Link>
+                            {/*Go to rentals */}
+                        </li>
+
                     </ul>
                 </div>
             </div>

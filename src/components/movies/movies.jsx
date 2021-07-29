@@ -7,6 +7,7 @@ import ListGroup from "../common/listgroup";
 import MoviesTable from "./moviesTable";
 import _ from "lodash"
 import Alert from "../UI/Alert.UI";
+import {Link} from "react-router-dom";
 
 class Movies extends Component {
 
@@ -98,10 +99,11 @@ class Movies extends Component {
                         onItemSelect={this.handleGenreSelect} // this does the handleGeenreSelect like which one has been selected
                         selectedItem={selectedGenre} // this passes selected genre
                     />
-
                 </div>
 
+
                 <div className="col">
+                    <Link className="btn btn-primary mt-1" to="/movies/new">New Movie</Link>
                     <Alert movieCount={totalCount}/>
                     <MoviesTable movies={movies} // --> this is for the movies object array
                                  onLike={this.handleLike} //--> this will deal with handleLike

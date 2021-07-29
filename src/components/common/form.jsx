@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import Joi from "joi-browser";
 import Input from "./input";
 
+
 class Form extends Component {
 
     //region state[data:object will hold items,errors: pbject will hold input errors]
@@ -121,22 +122,34 @@ class Form extends Component {
 
 
     //endregion
+    //region renderSelect()
+
+
+    //endregion
+
+
     //region  renderInput --> rendersinput for input from the user
-    renderInput = (name,label,type="text") => {
+    renderInput = (name, label, type = "text") => {
         //type is a string with text value.
         const {data, errors} = this.state;   // based on program running errors will be set.
+
+
         return (
             <Input
+
                 type={type} // type of the input field
                 name={name} // this is the username propertybeing passed notice that both username in here and state must match
                 value={data[name]} // this the value of the data object name
+
                 label={label}// label can be anything I want it to be
                 onChange={this.handleChange} // isreferencing onChange method.
                 error={errors[name]} // error object is being passed this wll check whether or not there is any errors.
 
             />
         );
-    };
+    }
+
+
     //endregion
     //endregion
 

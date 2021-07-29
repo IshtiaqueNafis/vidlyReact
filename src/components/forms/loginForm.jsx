@@ -1,5 +1,4 @@
 import React from 'react';
-import Input from "../common/input";
 import Joi from 'joi-browser'
 import Form from "../common/form"; // this the libray for validation of input.
 class LoginForm extends Form { // extends from form.
@@ -27,7 +26,7 @@ class LoginForm extends Form { // extends from form.
 
     //region methods ->[doSubmit()]
 
-    //region do submit method --> submit form based on login criteria.
+    //region do submit method --> submit form based on forms criteria.
     doSubmit = () => {
         console.log('submitted')
     }
