@@ -2,13 +2,14 @@
 import React, {Component} from 'react';
 import Joi from "joi-browser";
 import Input from "./input";
+import Select from "./select";
 
 
 class Form extends Component {
 
     //region state[data:object will hold items,errors: pbject will hold input errors]
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             data: {},
             errors: {}
@@ -17,24 +18,25 @@ class Form extends Component {
 
 
     //endregion
-    //region methods --> [Validate(),validateProperty(),submitForm(),handleChange(),renderBUtton(), renderInput()]
-    //region  validate method -->validates input when typing
+
+    //region methods --> [Validate(),validateProperty(),submitForm(),handleChange(),renderBUtton(), renderInput(),renderSelect()]
+    //region  validate method -->validates input when submiteed button is clicked.
 
     validate = () => {
-        //region object destrucure
+        //region object destrucure --> options  and error object
         const options = {abortEarly: false}
         const {error} = Joi.validate(this.state.data, this.schema, options); //-> return an error object.
-        //endregion
-        // region code explanation `
-        /*
-        this.state.data --> this.state.data this is the object of the form with userInput has property of username and password
-                           --> this is the object checked for validation
-        this.schema--> is the this.schema
-                   --> is the joy object also has same property as this.state.data but they are based on criteria property
-                   --> schema will be passed on from
-        abortEarly: false} --> this means lets say more than one error is found it will show more than one error message.
+        // region code explanation `-->  const {error} = Joi.validate(this.state.data, this.schema, options)
+        /* this.state.data
+           --> will get all the data included in the proerty
+           -->this.schema will get all the property from the schema
+            Joi.validate --> will compare both of the property to see if there are any errors.
+             options --> {abortEarly: false} is set to make sure more than one error message is shown
+
          */
         //endregion
+        //endregion
+
         if (!error) return null; //-> if error is falst means no value there what so ever error result.error does not have any messages of error
         const errors = {};
         for (let item of error.details) {
@@ -63,11 +65,18 @@ class Form extends Component {
 
 
     //endregion
-    //region validate property --> validate input after submission
+
+    //region validate property --> validate input during typing
     validateProperty = ({name, value}) => {
-        const obj = {[name]: value}; //-> by using the object property as input has name and value from keyboard inout will be in this name or password and value is fixed so no need to use computed property
+        const obj = {[name]: value};
+        //region explaning -->[name]:value
+        // both are part of currentTarget property from event object
+        //-> [name] --> will print the computed property of the object thus based on name the the value will be saved
+                       //-> if name is set to name it will find value associated with name
+        // --> value --> is what ever the user typed.
+        //endregion
         const schema = {[name]: this.schema[name]}
-        //region explanation
+        //region explanation --> const schema = {[name]: this.schema[name]}
         //  const schema = {[name]: this.schema[name]}
         /*
           -->  const schema --> schema have to be reitnalized here again cause it would not work cause it is checking after submission not before
@@ -78,11 +87,20 @@ class Form extends Component {
                    -->  this.schema[name] --> same concept as before will use computed property to acess the schema.
          */
         //endregion
-        const {error} = Joi.validate(obj, schema) // then compare one value at a time depends on input.
+        const {error} = Joi.validate(obj, schema)
+        //region explaning-->  const {error} = Joi.validate(obj, schema)
+        /*
+        const {error} = Joi.validate(obj, schema)
+        --> error object will be set if obj does not meet the criteria for schema which sets whether the state of the object is valid or not
+           --> if an error object is created which means there is some serious issue with the input.
+           --> if its not means input is good.
+         */
+        //endregion
         return error ? error.details[0].message : null; // -> if error is not null return error.message else return null. means no error what so ever.
 
     }
     //endregion
+
     //region  sumbitForm method --> submits the form
     handleSubmit = e => {
 
@@ -95,19 +113,22 @@ class Form extends Component {
 
     }
     //endregion
+
     //region handleChange -->updates the state
 
     handleChange = ({currentTarget: input}) => {
-        // this.currentTarget has been renamed to input here
-        const errors = {...this.state.errors}; //--> clones all the error messages.
+        //region {currentTarget: input} --> explanation
+        // currentTarget --> is the property of event object Returns it when its triggered
+          // input--> has been named here
+        //endregion
+        const errors = {...this.state.errors}; //--> clones all the error messages from the state.
         const errorMessage = this.validateProperty(input); // -> this recives input from the user.
-
         if (errorMessage) errors[input.name] = errorMessage; //--> this sets the value dynamcially if errormessage is truthy
         else delete errors[input.name]; //-> this is a built in method deletes property
 
         const data = {...this.state.data}; // cloning the object
         data[input.name] = input.value; //-> input.name set it to input.value.
-        //region comment and explantion
+        //region comment and explantion -->   data[input.name] = input.value;
         /*
          data[input.name] -->  name="username"  this is from username notice that key an property name in state both arte same
          data[input.name] -->  name="password"  this is from password notice that key an property name in state both are same
@@ -117,16 +138,33 @@ class Form extends Component {
         this.setState({data, errors}); // -->updating the state.
     }
     //endregion
+
     //region  renderButton --> renders button for forms
     renderButton = label => <button disabled={this.validate()} className="btn btn-primary mt-2">{label}</button>;
 
 
     //endregion
-    //region renderSelect()
 
+    //region renderSelect() --> renders drop down button 
+    renderSelect = (name, label, options) => {
+        const {data, errors} = this.state; //->getting the state property
+
+        return (
+
+            <Select
+                name={name} // this is name of the geenre id_aka key.
+                value={data[name]}
+                label={label}
+                options={options}
+                onChange={this.handleChange}
+                error={errors[name]}
+
+            />
+
+        )
+    }
 
     //endregion
-
 
     //region  renderInput --> rendersinput for input from the user
     renderInput = (name, label, type = "text") => {
@@ -136,7 +174,17 @@ class Form extends Component {
 
         return (
             <Input
+              //region
+                /*
+                type={type} --> this will decide what type of input I would wnat the input to be this could from a number or string
+                 name={name} --> name is works as a key to set the name property and id property which is unique.
+                 value={data[name]}  --> value
+                                     --> is used to ace4ss the value of the
+                                     --> property lets say data key is name if I used data[name] and nafis was typed this will acess data[name] ==> nafis will be passed as a value
+                 label={label} --> shows the label aka what user will see in the form.
 
+                 */
+              //endregion
                 type={type} // type of the input field
                 name={name} // this is the username propertybeing passed notice that both username in here and state must match
                 value={data[name]} // this the value of the data object name
@@ -150,8 +198,8 @@ class Form extends Component {
     }
 
 
-    //endregion
-    //endregion
+//endregion
+//endregion
 
 }
 

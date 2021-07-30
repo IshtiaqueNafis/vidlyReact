@@ -5,7 +5,7 @@ class LoginForm extends Form { // extends from form.
 
     //region state [data= object holds {username: '', password: ''} for input,error will hold input ]
     constructor(props, context) {
-        super(props, context);
+        super();
         this.state = {
             data: {username: '', password: ''}, // will be used as a validation to use on data
             errors: {} // this will take care of errors.

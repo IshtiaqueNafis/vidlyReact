@@ -8,6 +8,7 @@ import NotFound from "./components/common/not-found";
 import LoginForm from "./components/forms/loginForm";
 import './App.css';
 import Register from "./components/forms/register";
+import MovieForm from "./components/forms/movieForm";
 
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
         <main className="container">
             <Switch> {/*Switch is used to match the parameter of an object  works like a if else statment */}
                 <Route path='/login' component={LoginForm}/> {/*this is for logging in */}
+                <Route path='/movies/:id' component={MovieForm}/> {/*this is for logging in */}
 
                 <Route path='/register' component={Register}/> {/*this is for logging in */}
                 <Route path='/movies' component={Movies}/> {/* this will go to movies */}

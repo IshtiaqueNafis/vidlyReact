@@ -8,24 +8,27 @@ import MoviesTable from "./moviesTable";
 import _ from "lodash"
 import Alert from "../UI/Alert.UI";
 import {Link} from "react-router-dom";
+import SearchBox from "../common/searchbox";
 
 class Movies extends Component {
 
-//region state intalization
+    //region state intalization --> movies:[],pagesize(int),currentpage:(int),searchQuery:'',selectedGenre:null,searchcolumn{path,order}
     constructor(props, context) {
         super(props, context);
         this.state = {
             movies: [], // holds all the movie object
             pageSize: 4, // 4 pages in movie.
             currentPage: 1, // current page
+            searchQuery: '', // this is used for searching and item
+            selectedGenre: null,
             genres: [], // what genres the movies will have
             sortColumn: {path: 'title', order: 'asc'} // this is the path of the SortColumn done by path and based onorder by default set to asc
-
         }
     }
 
 //endregion
-//region movies and genre mounting
+
+    //region componentDidMount()-->  movies and genre mounting
 
     componentDidMount() {
         const genres = [{name: "All Genres", _id: ""}, ...getGenres()] // creating a new array with item All Genres
@@ -33,13 +36,18 @@ class Movies extends Component {
     }
 
     // endregion
-//region on click event
-    //region movieCrud
+
+    //region on click event [handledelete(),handlelike(),handleChange(),handleGenreSelect()]
+
+    //region handleDelete(movie)  --> deletes movie
     handleDelete = movie => {
         const movies = this.state.movies.filter(m => m._id !== movie._id);
         this.setState({movies: movies})
 
     }
+    //endregion
+
+    //region   handleLike(movie) --> likes and unlikes a movie.
     handleLike = movie => {
         const movies = [...this.state.movies]; // close array
         const index = movies.indexOf(movie); // find the index
@@ -50,32 +58,64 @@ class Movies extends Component {
     }
     //endregion
 
-    //region Sorting and paging
-    handlePageChange = page => this.setState({currentPage: page}) // handle pageCHange
-    handleSort = sortColumn => this.setState({sortColumn})  // handle sorting for column
+    //region handlePageChange(page) --> does page change, handleSort(sortColumn)--> sort based on clicked column
+
+    handlePageChange = page => this.setState({currentPage: page}) // takes page as a parameter ans sets current page to passed value.
+    handleSort = sortColumn => this.setState({sortColumn})  // takes sortColumn as a parameter ans sets current page to passed value.
     //endregion
 
-    //region Genre Selection
-    handleGenreSelect = genre => this.setState({selectedGenre: genre, currentPage: 1}) // page is being reset cause not all the filter does not ahve same number of items.
+    //region handleGenreSelect(genre)  --> select genres and set current page
+    handleGenreSelect = genre => this.setState({selectedGenre: genre, currentPage: 1})
+    //get genre from parameter and set it as current genre and also set page to 1 as some genres might have more than 1 page
     //endregion
 
-    //region GetpageData
-    getPageData = () => {
-        const {movies: allMovies, currentPage, pageSize, selectedGenre, sortColumn} = this.state;
-        const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies; // returns allmoves if no match is found with genre else filter based on genre.
-        const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
-        const movies = paginate(sorted, currentPage, pageSize); // this puts 4 movies per page
-
-        return {totalCount: filtered.length, data: movies} // return them as object
-        //region comments & expalanation
+    //region  handleSearch(query) --> searches for item
+    handleSearch = query => {
+        this.setState({ searchQuery: query, selectedGenre: null, currentPage: 1 });
+        //region  this.setState({ searchQuery: query, selectedGenre: null, currentPage: 1 }); --> explanation
         /*
-         const filtered = selectedGenre ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies; --> this gets all the movies or movies based on selected criteria
-         const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]) -> filtered is the array of movies, [sortColumn.path][iterate] decides column to sort it by, and [sortColumn.order] this will decide whther it will be asc or desc
-          const movies = paginate(sorted, currentPage, pageSize);  then this paginate movies pretty much based on filtered and sorted data.
-         */
-
-
+         searchQuery is set to query --> which is a empty string
+         selectedGenre is null cause the word could be any genre so its not limited
+         currentPage is set to 1 so the first page is shown
+        */
         //endregion
+    };
+    //endregion
+
+    //region getPageData () --> sets how the page will look like.
+    getPageData = () => {
+        const {movies: allMovies, currentPage, pageSize, selectedGenre, sortColumn,searchQuery} = this.state;
+        //region explaining     const {movies: allMovies, currentPage, pageSize, selectedGenre, sortColumn,searchQuery} = this.state;
+        /*
+           movies: allMovies --> this for all the movies  also has been renamed into allMovies
+           cuurentPage --> what the current page is going to be.
+           pageSize --> how many items per page
+           selectedGenre --> would be on the sorting column like what column has been selected.
+         */
+        //endregion
+        let filtered;
+        filtered = allMovies; 
+        if(searchQuery){
+            filtered= allMovies.filter(m=>m.title.toLowerCase().startsWith(searchQuery.toLowerCase()))
+            // filter movies based on search query
+        }else if(selectedGenre && selectedGenre._id){
+            filtered = allMovies.filter(m=>m.genre._id ===selectedGenre._id) // filtermovies that matches gnere
+        }
+        const sorted = _.orderBy(filtered,[sortColumn.path],[sortColumn.order])
+        //region const sorted = _.orderBy(filtered,[sortColumn.path],[sortColumn.order]) -->explanation
+        /*
+           _.orderBy --> is a loddash method which sorts the column based on sorted.
+           filtered --> is the array of the object
+           sortColumn.path] --> based on crtieria program will be shown.
+           [sortColumn.order] --> sets the order is it based on higest to lowest or lowest to highest
+
+
+         */
+        //endregion
+        const movies = paginate(sorted,currentPage,pageSize) // get movies based sorting,currentpage and pagesize criteria.
+
+
+        return {totalCount:filtered.length,data:movies} // return this as object
 
     }
 
@@ -85,8 +125,8 @@ class Movies extends Component {
 
     render() {
         //region object destructure.
-        const {currentPage, pageSize, selectedGenre, sortColumn, handleGenreSelect} = this.state;
-        const {totalCount, data: movies} = this.getPageData();
+        const {currentPage, pageSize, selectedGenre, sortColumn, searchQuery} = this.state;
+        const {totalCount, data: movies} = this.getPageData(); //-> get the data from count and movies.
         //endregion
 
 
@@ -105,6 +145,8 @@ class Movies extends Component {
                 <div className="col">
                     <Link className="btn btn-primary mt-1" to="/movies/new">New Movie</Link>
                     <Alert movieCount={totalCount}/>
+                    <SearchBox value={searchQuery} // is the query from the search.
+                               onChange={this.handleSearch}/>
                     <MoviesTable movies={movies} // --> this is for the movies object array
                                  onLike={this.handleLike} //--> this will deal with handleLike
                                  sortColumn={sortColumn} // --> this is the sort column object passed for column

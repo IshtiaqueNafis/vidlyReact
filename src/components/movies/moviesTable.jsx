@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 class MoviesTable extends React.Component {
  //region  table columnns
     columns = [
-        {path: 'title', label: 'Title',content:movie=> <Link to={`/movieDetails/${movie._id}`}>{movie.title}</Link> },
+        {path: 'title', label: 'Title',content:movie=> <Link to={`/movies/${movie._id}`}>{movie.title}</Link> },
         {path: 'genre.name', label: 'Genre'},
         {path: 'numberInStock', label: 'Stock'},
         {path: 'dailyRentalRate', label: 'Rate'},
