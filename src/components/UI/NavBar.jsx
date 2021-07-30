@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link,Switch,Route} from "react-router-dom";
+import {Link, Switch, Route, NavLink} from "react-router-dom";
 import Movies from "../movies/movies";
 
 const NavBar = () => {
@@ -11,29 +11,29 @@ const NavBar = () => {
                 <div className="collapse navbar-collapse" id="navbarColor02">
                     <ul className="navbar-nav me-auto">
                         <li className="nav-item">
-                            <Link to="/" className="nav-link">Movies</Link>
+                            <NavLink to="/" className="nav-link">Movies</NavLink>
                             {/*This goes to home page of movies works same as Router methid but needs a link */}
                         </li>
                         <li className="nav-item">
-                            <Link to="/customers" className="nav-link">Customers</Link>
+                            <NavLink to="/customers" className="nav-link">Customers</NavLink>
                             {/*Goes to customers */}
                         </li>
                         <li className="nav-item">
-                            <Link to="/Rentals" className="nav-link">Rentals</Link>
+                            <NavLink to="/Rentals" className="nav-link">Rentals</NavLink>
                             {/*Go to rentals */}
                         </li>
                         <li className="nav-item">
-                            <Link to="/login" className="nav-link">Login</Link>
-                            {/*Go to rentals */}
-                        </li>
-
-                        <li className="nav-item">
-                            <Link to="/register" className="nav-link">Register</Link>
+                            <NavLink to="/login" className="nav-link">Login</NavLink>
                             {/*Go to rentals */}
                         </li>
 
                         <li className="nav-item">
-                            <Link to="/newmovie" className="nav-link">New Movie</Link>
+                            <NavLink to="/register" className="nav-link">Register</NavLink>
+                            {/*Go to rentals */}
+                        </li>
+
+                        <li className="nav-item">
+                            <NavLink to="/newmovie" className="nav-link">New Movie</NavLink>
                             {/*Go to rentals */}
                         </li>
 
