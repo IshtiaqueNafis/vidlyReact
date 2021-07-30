@@ -3,7 +3,7 @@ import _ from 'lodash'
 import PropTypes from 'prop-types';
 
 const Pagination = ({itemsCount, onPageChange, pageSize, currentPage}) => {
-   //region page callculation
+
     const pagesCount = Math.ceil(itemsCount / pageSize); // like how many pages will be there all together. for category
     if (pagesCount === 1) return null;
     const pages = _.range(1, pagesCount + 1)
@@ -37,7 +37,6 @@ CurrenttPage =1;
  */
 
     //endregion
-//endregion
     return (
         <nav>
             <ul className="pagination">
@@ -51,8 +50,8 @@ CurrenttPage =1;
         </nav>
     );
 };
-//region
-// proptypes of values requirement
+//region proptypes of values requirement for the parameter  itemCount,pageSize,CurrentPage,onPageChange.
+//
 Pagination.propTypes = {
     itemsCount: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,

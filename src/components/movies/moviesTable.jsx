@@ -1,6 +1,6 @@
 import React from 'react';
-import Like from "../common/like";
-import Table from "../common/table";
+import Like from "../UI/like";
+import Table from "../common/tables/table";
 import Button from "../UI/Button.UI.Jsx.jsx";
 import {Link} from "react-router-dom";
 

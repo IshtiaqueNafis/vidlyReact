@@ -1,9 +1,9 @@
 import React from 'react';
 
-//region MainProgram
+
 const ListGroup = ({items, textProperty, valueProperty, onItemSelect, selectedItem}) => {
 
-    //region comment and explanation
+    // const ListGroup = ({items, textProperty, valueProperty, onItemSelect, selectedItem})--> region comment and explanation
     /*
     items --> array of items this case all the movies genre
     textProperty--> passed in as string to use dynamically
@@ -20,9 +20,9 @@ const ListGroup = ({items, textProperty, valueProperty, onItemSelect, selectedIt
 
     //endregion
 
-    //region RenderMethod
+
     return (
-        <ul className="list-group">
+        <ul className="list-group mt-1">
             {items.map(item => // looping through all the categories
                 <li onClick={() => onItemSelect(item)}  // with click each category will chagne.
                     key={item[valueProperty]} // this is they key for item using default props to acess value
@@ -32,9 +32,9 @@ const ListGroup = ({items, textProperty, valueProperty, onItemSelect, selectedIt
 
 
     );
-    //endregion
+
 };
-    // region default props --> decides the property for the
+    // region default props --> setting the default property for textProperty and value property
 ListGroup.defaultProps = {
     textProperty: 'name', // deefault props is being set here this gives it dynamic optins
     valueProperty: '_id'
@@ -43,4 +43,3 @@ ListGroup.defaultProps = {
 //endregion
 export default ListGroup;
 
-//endregion

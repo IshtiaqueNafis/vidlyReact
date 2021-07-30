@@ -1,6 +1,6 @@
 import React from 'react';
 import Joi from 'joi-browser'
-import Form from "../common/form"; // this the libray for validation of input.
+import Form from "../common/forms/form"; // this the libray for validation of input.
 class LoginForm extends Form { // extends from form.
 
     //region state [data= object holds {username: '', password: ''} for input,error will hold input ]

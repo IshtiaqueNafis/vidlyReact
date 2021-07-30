@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 
 class TableHeader extends Component {
-// Columns:array
-// pass sort column
-// onsort which is a function
-    //region Methods
+
+    //region Methods raiseSort = (path),renderSortIcon = column
+
+    //region raiseSort(path) --> sort the items based on highest or lowest based on click on table header.
     raiseSort = (path) => {
         const sortColumn = {...this.props.sortColumn} // copying the object from the props
         if (sortColumn.path === path) {
@@ -27,17 +27,21 @@ class TableHeader extends Component {
 
         this.props.onSort(sortColumn)
     }
+    //endregion
+
+    //region renderSortIcon = column => --> shows which icons will be shown when a table is clicked.
     renderSortIcon = column => {
         const {sortColumn} = this.props
         if (column.path !== sortColumn.path) return null; // if column path==null when column was same
         if (sortColumn.order === "asc") return <i className='fa fa-sort-asc'/> // if current value is the same
         return <i className='fa fa-sort-desc'/> // if its low return high
     }
+    //endregion
 //endregion
     render() {
         return (
             <thead>
-            <tr className="table-light">
+            <tr className="table-active">
                 {this.props.columns.map(column =>
                     <th className='clickable'
                         key={column.path || column.key} // --> this make sure either key or column can be used as key

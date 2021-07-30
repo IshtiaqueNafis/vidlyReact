@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
-import {Link} from "react-router-dom";
 
 class TableBody extends Component {
-    //region methods
+    //region methods  --> renderCell(),createKey = (item, column)
+
+    //region  renderCell() -->  rendets item,and column
     renderCell = (item, column) => {
         if (column.content) {
             return column.content(item)
         } else {
-
-
 
             return _.get(item, column.path);
         }
@@ -24,18 +23,21 @@ class TableBody extends Component {
          */
         //endregion
     }
+    //endregion
 
+    //region   createKey = (item, column) --> create key for columns
     createKey = (item, column) => item._id + (column.path || column.key)
     //region code explanation
     /*
     (item, column) is being passed here
     item then either column.path attribute is there or column.key
      */
+    //endregion
+
+    //endregion
 
 
     //endregion
-    //endregion
-
     render() {
         const {data, columns} = this.props;
         return (

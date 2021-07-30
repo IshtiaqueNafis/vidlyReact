@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import {getMovies} from "../../Starter Code/services/fakeMovieService";
 import {getGenres} from "../../Starter Code/services/fakeGenreService";
-import Pagination from "../common/pagination";
+import Pagination from "../common/pagingandsorting/pagination";
 import {paginate} from "../../utils/paginate";
-import ListGroup from "../common/listgroup";
+import ListGroup from "../common/sidebar/listgroup";
 import MoviesTable from "./moviesTable";
 import _ from "lodash"
 import Alert from "../UI/Alert.UI";
 import {Link} from "react-router-dom";
-import SearchBox from "../common/searchbox";
+import SearchBox from "../common/forms/searchbox";
 
 class Movies extends Component {
 
@@ -71,7 +71,7 @@ class Movies extends Component {
 
     //region  handleSearch(query) --> searches for item
     handleSearch = query => {
-        this.setState({ searchQuery: query, selectedGenre: null, currentPage: 1 });
+        this.setState({searchQuery: query, selectedGenre: null, currentPage: 1});
         //region  this.setState({ searchQuery: query, selectedGenre: null, currentPage: 1 }); --> explanation
         /*
          searchQuery is set to query --> which is a empty string
@@ -84,7 +84,7 @@ class Movies extends Component {
 
     //region getPageData () --> sets how the page will look like.
     getPageData = () => {
-        const {movies: allMovies, currentPage, pageSize, selectedGenre, sortColumn,searchQuery} = this.state;
+        const {movies: allMovies, currentPage, pageSize, selectedGenre, sortColumn, searchQuery} = this.state;
         //region explaining     const {movies: allMovies, currentPage, pageSize, selectedGenre, sortColumn,searchQuery} = this.state;
         /*
            movies: allMovies --> this for all the movies  also has been renamed into allMovies
@@ -94,14 +94,14 @@ class Movies extends Component {
          */
         //endregion
         let filtered;
-        filtered = allMovies; 
-        if(searchQuery){
-            filtered= allMovies.filter(m=>m.title.toLowerCase().startsWith(searchQuery.toLowerCase()))
+        filtered = allMovies;
+        if (searchQuery) {
+            filtered = allMovies.filter(m => m.title.toLowerCase().startsWith(searchQuery.toLowerCase()))
             // filter movies based on search query
-        }else if(selectedGenre && selectedGenre._id){
-            filtered = allMovies.filter(m=>m.genre._id ===selectedGenre._id) // filtermovies that matches gnere
+        } else if (selectedGenre && selectedGenre._id) {
+            filtered = allMovies.filter(m => m.genre._id === selectedGenre._id) // filtermovies that matches gnere
         }
-        const sorted = _.orderBy(filtered,[sortColumn.path],[sortColumn.order])
+        const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
         //region const sorted = _.orderBy(filtered,[sortColumn.path],[sortColumn.order]) -->explanation
         /*
            _.orderBy --> is a loddash method which sorts the column based on sorted.
@@ -112,10 +112,10 @@ class Movies extends Component {
 
          */
         //endregion
-        const movies = paginate(sorted,currentPage,pageSize) // get movies based sorting,currentpage and pagesize criteria.
+        const movies = paginate(sorted, currentPage, pageSize) // get movies based sorting,currentpage and pagesize criteria.
 
 
-        return {totalCount:filtered.length,data:movies} // return this as object
+        return {totalCount: filtered.length, data: movies} // return this as object
 
     }
 
