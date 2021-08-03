@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {getMovies} from "../../Starter Code/services/fakeMovieService";
-import {getGenres} from "../../Starter Code/services/fakeGenreService";
+import {getMovies} from "../../services/fakeMovieService";
+import {getGenres} from "../../services/genreService";
 import Pagination from "../common/pagingandsorting/pagination";
 import {paginate} from "../../utils/paginate";
 import ListGroup from "../common/sidebar/listgroup";
@@ -30,8 +30,9 @@ class Movies extends Component {
 
     //region componentDidMount()-->  movies and genre mounting
 
-    componentDidMount() {
-        const genres = [{name: "All Genres", _id: ""}, ...getGenres()] // creating a new array with item All Genres
+    async componentDidMount() {
+        const {data} = await getGenres(); // object destrucutring data is gotten from the server. data is the array object with all the data.
+        const genres = [{name: "All Genres", _id: ""}, ...data] // creating a new array with item All Genres // adding genes with ... operator
         this.setState({movies: getMovies(), genres})
     }
 
