@@ -1,8 +1,8 @@
 import React from 'react';
 import Form from "../common/forms/form";
 import Joi from "joi-browser";
-import {getGenres} from "../../services/fakeGenreService";
-import {getMovie, saveMovie} from "../../services/fakeMovieService";
+import {getGenres} from "../../services/genreService";
+import {getMovie, saveMovie} from "../../services/movieService";
 
 class MovieForm extends Form {
 
@@ -38,18 +38,34 @@ class MovieForm extends Form {
     }
     //endregion
 
-    //region componentDidmount --> will set genres state, allow the edit or delete movies based on user input
-    componentDidMount() {
-        const genres = getGenres(); // --> getting genre from genres
+    //region populateGenres()--> will populate genres
+    async populateGenres() {
+        const {data: genres} = await getGenres(); // --> getting genre from genres
         this.setState({genres}); // thjis is setting the states
+    }
 
-        const movieId = this.props.match.params.id; //this checks the movieId from the parameter
-        if (movieId === 'new') return; //if the parameter is new means
+    //endregion
+//region populateMovies() --> populating movies.
+    async populateMovies() {
+        try {
+            const movieId = this.props.match.params.id; //this checks the movieId from the parameter
+            if (movieId === 'new') return; //if the parameter is new means
+            const {data: movie} = await getMovie(movieId); // --> get the movies based on Id
+            this.setState({data: this.mapToViewModel(movie)}); // this sets the data for the movie
+        } catch (ex) {
+            if (ex.response && ex.response.status === 404) {
+                this.props.history.replace("/not-found")
+            }
+        }
+    }
 
-        const movie = getMovie(movieId); // --> get the movies based on Id
-        if (!movie) return this.props.history.replace('/not-found') //if movieId does not exist means there is no movie so this willb e show
+//endregion
+    //region componentDidmount --> will set genres state, allow the edit or delete movies based on user input
+    async componentDidMount() {
+        await this.populateGenres(); // populating the Genre.
+        await this.populateMovies(); // populating the movies
 
-        this.setState({data: this.mapToViewModel(movie)}); // this sets the data for the movie
+
     }
 
     //endregion
@@ -82,7 +98,7 @@ class MovieForm extends Form {
             <div>
                 <h1>Movie Form</h1>
                 {this.renderInput('title', 'Title')}
-                {this.renderSelect('genreId','Genre',this.state.genres)}
+                {this.renderSelect('genreId', 'Genre', this.state.genres)}
                 {this.renderInput('numberInStock', 'Number in Stock', 'number')}
                 {this.renderInput('dailyRentalRate', 'Rate', 'number')}
                 {this.renderButton("Save")}
