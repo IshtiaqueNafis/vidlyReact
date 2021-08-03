@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {getMovies} from "../../services/fakeMovieService";
+import {toast} from "react-toastify";
+import {deleteMovie, getMovies} from "../../services/movieService";
 import {getGenres} from "../../services/genreService";
 import Pagination from "../common/pagingandsorting/pagination";
 import {paginate} from "../../utils/paginate";
@@ -9,6 +10,7 @@ import _ from "lodash"
 import Alert from "../UI/Alert.UI";
 import {Link} from "react-router-dom";
 import SearchBox from "../common/forms/searchbox";
+
 
 class Movies extends Component {
 
@@ -32,8 +34,9 @@ class Movies extends Component {
 
     async componentDidMount() {
         const {data} = await getGenres(); // object destrucutring data is gotten from the server. data is the array object with all the data.
+        const {data: movies} = await getMovies(); // getting the moveis from the database backend.
         const genres = [{name: "All Genres", _id: ""}, ...data] // creating a new array with item All Genres // adding genes with ... operator
-        this.setState({movies: getMovies(), genres})
+        this.setState({movies, genres})
     }
 
     // endregion
@@ -41,9 +44,21 @@ class Movies extends Component {
     //region on click event [handledelete(),handlelike(),handleChange(),handleGenreSelect()]
 
     //region handleDelete(movie)  --> deletes movie
-    handleDelete = movie => {
-        const movies = this.state.movies.filter(m => m._id !== movie._id);
-        this.setState({movies: movies})
+    handleDelete = async movie => {
+        const originalMovies = this.state.movies; // copying the original state this is to prevent 404 error.
+        const movies = originalMovies.filter(m => m._id !== movie._id); // filter the moveis not based on the id
+        this.setState({movies: movies}) // update state based on delete movies
+
+        try {
+            await deleteMovie(movie._id); // try to delete the movie // then try to delete movies from the database with the msessage
+            toast.info("movie successfully deleted") // this will show when movie has been deleted
+        } catch (ex) {
+            if (ex.response && ex.response.status === 404) {
+                // if ex.respense truthy and respoense,status is 404 means there is something wroring and this taost error message will be shown
+                toast.error("this movie already has been deleted")
+            }
+            this.setState({movies: originalMovies}) // at the end set state to the original movies.
+        }
 
     }
     //endregion
