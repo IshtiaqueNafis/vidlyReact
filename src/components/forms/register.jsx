@@ -29,7 +29,9 @@ class Register extends Form {
     //region do submit method --> submit form based on forms criteria.
     doSubmit = async () => {
         try {
-            await userService.register(this.state.data) // this registers a user.
+            const response = await userService.register(this.state.data) // this registers a user.
+            localStorage.setItem('token', response.headers['x-auth-token'])// get the id which gives user option to login after register
+            window.location = "/";
         } catch (ex) {
             if (ex.response && ex.response.status === 400) { // check if there is an error or not if there is an error show this.
                 const errors = {...this.state.errors} // cloning error

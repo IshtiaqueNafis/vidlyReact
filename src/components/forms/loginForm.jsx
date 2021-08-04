@@ -6,7 +6,7 @@ import {login} from '../../services/authService';
 class LoginForm extends Form { // extends from form.
 
     //region state [data= object holds {username: '', password: ''} for input,error will hold input ]
-    constructor(props, context) {
+    constructor() {
         super();
         this.state = {
             data: {username: '', password: ''}, // will be used as a validation to use on data
@@ -41,7 +41,7 @@ class LoginForm extends Form { // extends from form.
              token is the key jwt is the value --> thus key value pair
             */
             //endregion
-            this.props.history.push("/");
+           window.location = "/"; // this will cause full reload.
 
 
         } catch (ex) {
