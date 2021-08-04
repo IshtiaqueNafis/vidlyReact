@@ -143,6 +143,7 @@ class Movies extends Component {
         //region object destructure.
         const {currentPage, pageSize, selectedGenre, sortColumn, searchQuery} = this.state;
         const {totalCount, data: movies} = this.getPageData(); //-> get the data from count and movies.
+        const {user} = this.props;
         //endregion
 
 
@@ -159,7 +160,11 @@ class Movies extends Component {
 
 
                 <div className="col">
-                    <Link className="btn btn-primary mt-1" to="/movies/new">New Movie</Link>
+                    {
+                        user &&  <Link className="btn btn-primary mt-1" to="/movies/new">New Movie</Link>
+                        // means if the user logged is a admin this message will be shown.
+                    }
+
                     <Alert movieCount={totalCount}/>
                     <SearchBox value={searchQuery} // is the query from the search.
                                onChange={this.handleSearch}/>

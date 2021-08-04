@@ -38,7 +38,11 @@ class App extends React.Component {
                         <Route path='/movies/:id' component={MovieForm}/> {/*this is for logging in */}
 
                         <Route path='/register' component={Register}/> {/*this is for logging in */}
-                        <Route path='/movies' component={Movies}/> {/* this will go to movies */}
+                        <Route path='/movies'
+                               render={props => <Movies {...props} user={this.state.user} />}
+                        /> {/* this will go to movies  with router is passed cause by itself route can not pass movies or functions.
+                        //user object is being passed here
+                        */}
                         <Route path='/customers' component={Customers}/>{/* this will go to customers */}
                         <Route path='/rentals' component={Rental}/> {/* this will go to rentals */}
                         <Route path='/not-found' component={NotFound}/> {/* this will go to found */}

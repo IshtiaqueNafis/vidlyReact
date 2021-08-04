@@ -4,9 +4,9 @@ import {toast} from "react-toastify";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
 //responsible for login and log
+const tokenKey = "token" // this way varaible can be modified easuly.
 http.setJwt(getJwt()) // getting the token
 const apiEndpoint = apiUrl + "/auth";
-const tokenKey = "token" // this way varaible can be modified easuly.
 export async function login(email, password) {
     const {data: jwt} = await http.post(apiEndpoint, {email, password}); // getting the jwt javaauthenticiation token from data server. and naming it as jwt
 
