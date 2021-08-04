@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
+import auth from "../../services/authService"; // auth is created as an object
 
 class Logout extends Component {
     componentDidMount() {
-        localStorage.removeItem('token'); // this destorys the id
+        auth.logout(); //thys auth. means it will use all the property from authService,
         window.location = "/";
     }
 

@@ -10,22 +10,17 @@ import './App.css';
 import Register from "./components/forms/register";
 import MovieForm from "./components/forms/movieForm";
 import {ToastContainer} from "react-toastify"; // this for the toast container
-import jwtDecode from 'jwt-decode'
 import 'react-toastify/dist/ReactToastify.css'
 import Logout from "./components/forms/logout";
+import auth from "./services/authService";
 
 class App extends React.Component {
     state = {}
 
     componentDidMount() {
 
-        try {
-            const jwt = localStorage.getItem("token"); // get the token of the logged in user
-            const user = jwtDecode(jwt); // decode with jwtDecode.
-            this.setState({user}) // set a new object with user
-        } catch (exception) {
-
-        }
+        const user = auth.getCurrentUser() // get the current user from database,
+        this.setState({user})
 
     }
 

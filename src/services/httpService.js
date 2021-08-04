@@ -1,7 +1,11 @@
 import axios from "axios";
 import logger from "./logService";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
+import auth from "./authService";
 
+axios.defaults.headers.common['x-auth-token'] = auth.getJwt()
+// this is the default headers
+// sets headers on post,get or delete for any request
 axios.interceptors.response.use(null, error => {
     const expectedError =
         error.response &&

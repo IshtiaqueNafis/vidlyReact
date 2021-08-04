@@ -1,7 +1,7 @@
 import React from 'react';
 import Joi from 'joi-browser'
 import Form from "../common/forms/form"; // this the libray for validation of input.
-import {login} from '../../services/authService';
+import auth from '../../services/authService';
 
 class LoginForm extends Form { // extends from form.
 
@@ -33,14 +33,7 @@ class LoginForm extends Form { // extends from form.
 
         try {
             const {data} = this.state;
-            const {data: jwt} = await login(data.username, data.password) // this gets jwt token which is used as an id card
-            localStorage.setItem("token", jwt)
-            //region explanation -->localStorage.setItem("token", jwt)
-            /* -> takes two parameter one is token another is jwt. */
-            /*
-             token is the key jwt is the value --> thus key value pair
-            */
-            //endregion
+            await auth.login(data.username, data.password) // this gets jwt token which is used as an id card
            window.location = "/"; // this will cause full reload.
 
 
