@@ -33,7 +33,17 @@ class LoginForm extends Form { // extends from form.
 
         try {
             const {data} = this.state;
-            await login(data.username, data.password)
+            const {data: jwt} = await login(data.username, data.password) // this gets jwt token which is used as an id card
+            localStorage.setItem("token", jwt)
+            //region explanation -->localStorage.setItem("token", jwt)
+            /* -> takes two parameter one is token another is jwt. */
+            /*
+             token is the key jwt is the value --> thus key value pair
+            */
+            //endregion
+            this.props.history.push("/");
+
+
         } catch (ex) {
             if (ex.response && ex.response.status === 400) {
                 const errors = {...this.state.errors}
