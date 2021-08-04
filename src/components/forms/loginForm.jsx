@@ -1,7 +1,8 @@
 import React from 'react';
 import Joi from 'joi-browser'
-import Form from "../common/forms/form"; // this the libray for validation of input.
+import Form from "../common/forms/form"; // this the library for validation of input.
 import auth from '../../services/authService';
+import {Redirect} from "react-router-dom";
 
 class LoginForm extends Form { // extends from form.
 
@@ -19,7 +20,7 @@ class LoginForm extends Form { // extends from form.
     //region schema --> decides input criteria
 
     schema = {
-        username: Joi.string().required().label("Username"),// user name and password both expected to be an input of string and both has to be mandotry
+        username: Joi.string().required().label("Username"),// user name and password both expected to be an input of string and both has to be mandatory
         password: Joi.string().required().label("Password"), // label is used to create friendly messages
 
     }
@@ -34,7 +35,9 @@ class LoginForm extends Form { // extends from form.
         try {
             const {data} = this.state;
             await auth.login(data.username, data.password) // this gets jwt token which is used as an id card
-           window.location = "/"; // this will cause full reload.
+            const {state} = this.props.location;
+
+            window.location = state ? state.from.pathname : '/';
 
 
         } catch (ex) {
@@ -51,14 +54,14 @@ class LoginForm extends Form { // extends from form.
     //endregion
 
     render() {
-
+        if (auth.getCurrentUser()) return <Redirect to="/"/>
         return (
             <div>
                 <h1>
                     Login
                 </h1>
                 <form onSubmit={this.handleSubmit}>
-                    {/*this is a form submit function its built in on funnction */}
+                    {/*this is a form submit function its built in on function */}
                     {this.renderInput('username', 'Username')}
                     {this.renderInput('password', 'Password', "password")}
                     {this.renderButton('Login')}

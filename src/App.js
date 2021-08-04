@@ -13,6 +13,7 @@ import {ToastContainer} from "react-toastify"; // this for the toast container
 import 'react-toastify/dist/ReactToastify.css'
 import Logout from "./components/forms/logout";
 import auth from "./services/authService";
+import ProtectedRoute from "./components/security/protectedRoute";
 
 class App extends React.Component {
     state = {}
@@ -35,13 +36,7 @@ class App extends React.Component {
                     <Switch> {/*Switch is used to match the parameter of an object  works like a if else statment */}
                         <Route path='/login' component={LoginForm}/> {/*this is for logging in */}
                         <Route path='/logout' component={Logout}/> {/*this is for logging in */}
-                        <Route path='/movies/:id'
-                               render={props => {
-                                   if (!this.state.user) return <Redirect to="/login"/>
-                                   return <MovieForm {...props}/>
-                               }}
-
-                        />
+                        <ProtectedRoute path="/movies/:id" component={MovieForm} />
 
                         {/*this is for logging in */}
 
