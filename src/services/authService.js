@@ -2,8 +2,9 @@ import http from "./httpService";
 import {apiUrl} from "../config.json";
 import {toast} from "react-toastify";
 import jwtDecode from "jwt-decode";
+import axios from "axios";
 //responsible for login and log
-
+http.setJwt(getJwt()) // getting the token
 const apiEndpoint = apiUrl + "/auth";
 const tokenKey = "token" // this way varaible can be modified easuly.
 export async function login(email, password) {
@@ -37,15 +38,17 @@ export function getCurrentUser() {
 export function loginWithJwt(jwt) {
     localStorage.setItem(tokenKey, jwt) // then set the local storage based on key which is token and jwt is the property.
 }
-export function getJwt(){
+
+export function getJwt() {
     return localStorage.getItem(tokenKey)
 }
+
 
 export default {
     login,
     logout,
     getCurrentUser,
     loginWithJwt,
-    getJwt
+
 
 }
