@@ -51,7 +51,7 @@ class Movies extends Component {
 
         try {
             await deleteMovie(movie._id); // try to delete the movie // then try to delete movies from the database with the msessage
-            toast.info("movie successfully deleted") // this will show when movie has been deleted
+
         } catch (ex) {
             if (ex.response && ex.response.status === 404) {
                 // if ex.respense truthy and respoense,status is 404 means there is something wroring and this taost error message will be shown

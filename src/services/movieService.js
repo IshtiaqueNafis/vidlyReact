@@ -1,21 +1,30 @@
 import http from "./httpService";
-import config from '../config.json'
+import { apiUrl } from "../config.json";
 
-// note that api url is from the json file
+const apiEndpoint = apiUrl + "/movies";
+
+function movieUrl(id) {
+    return `${apiEndpoint}/${id}`;
+}
+
 export function getMovies() {
-    return http.get(config.apiUrl + "/movies") // this is the axios parameter allows genres to be created by using put method
-    // by using get it will get all the object from the database.
+    return http.get(apiEndpoint);
 }
 
 export function getMovie(movieId) {
-    return http.get(`${config.apiUrl}/movies/${movieId}`);//this gets a single movie from the database based on the id
+    return http.get(movieUrl(movieId));
 }
 
-export function saveMovie(movie){
+export function saveMovie(movie) {
+    if (movie._id) {
+        const body = { ...movie };
+        delete body._id;
+        return http.put(movieUrl(movie._id), body);
+    }
 
+    return http.post(apiEndpoint, movie);
 }
 
 export function deleteMovie(movieId) {
-    return http.delete(config.apiUrl + '/' + movieId) // this is the axios parameter allows
-    // this will delete movies from a datababse based on id provided
+    return http.delete(movieUrl(movieId));
 }
