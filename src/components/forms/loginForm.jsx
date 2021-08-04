@@ -1,6 +1,8 @@
 import React from 'react';
 import Joi from 'joi-browser'
 import Form from "../common/forms/form"; // this the libray for validation of input.
+import {login} from '../../services/authService';
+
 class LoginForm extends Form { // extends from form.
 
     //region state [data= object holds {username: '', password: ''} for input,error will hold input ]
@@ -27,8 +29,20 @@ class LoginForm extends Form { // extends from form.
     //region methods ->[doSubmit()]
 
     //region do submit method --> submit form based on forms criteria.
-    doSubmit = () => {
-        console.log('submitted')
+    doSubmit = async () => {
+
+        try {
+            const {data} = this.state;
+            await login(data.username, data.password)
+        } catch (ex) {
+            if (ex.response && ex.response.status === 400) {
+                const errors = {...this.state.errors}
+                errors.username = ex.response.data;
+                this.setState({errors})
+            }
+        }
+
+
     }
     //endregion
     //endregion
