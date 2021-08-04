@@ -35,11 +35,19 @@ class App extends React.Component {
                     <Switch> {/*Switch is used to match the parameter of an object  works like a if else statment */}
                         <Route path='/login' component={LoginForm}/> {/*this is for logging in */}
                         <Route path='/logout' component={Logout}/> {/*this is for logging in */}
-                        <Route path='/movies/:id' component={MovieForm}/> {/*this is for logging in */}
+                        <Route path='/movies/:id'
+                               render={props => {
+                                   if (!this.state.user) return <Redirect to="/login"/>
+                                   return <MovieForm {...props}/>
+                               }}
+
+                        />
+
+                        {/*this is for logging in */}
 
                         <Route path='/register' component={Register}/> {/*this is for logging in */}
                         <Route path='/movies'
-                               render={props => <Movies {...props} user={this.state.user} />}
+                               render={props => <Movies {...props} user={this.state.user}/>}
                         /> {/* this will go to movies  with router is passed cause by itself route can not pass movies or functions.
                         //user object is being passed here
                         */}
